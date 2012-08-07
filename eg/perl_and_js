@@ -1,0 +1,21 @@
+my $args = Getopts::Concise->new(
+    '[s]ource required'  => "Name of reference DB",
+    '[S]ource_host'      => "Hostname of reference DB",
+    '[t]arget required'  => "Name of output DB (will be wiped)",
+    '[T]arget_host'      => "Hostname of output DB (will be wiped)",
+)->default(
+    source_host => 'localhost',
+    target_host => 'localhost'
+)->parse;
+
+
+var args = require('opinionated').args({
+	'[v]erbose flag': 'Verbose mode',
+	'[j]obs number' : 'Number of jobs to run',
+	'[f]ile many'   : 'Files to execute against'
+}).default({
+	'source_host'  : 'localhost',
+	'source_target': 'localhost'
+}).catchall('pids').parse();
+
+

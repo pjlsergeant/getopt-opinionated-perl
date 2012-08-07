@@ -1,0 +1,38 @@
+[
+    {
+        'name':    "Example 1 from ideas: Mix",
+        'cmdline': ['-v', '-j', '5', '-f', 'foo', '-f', 'bar'],
+        'setup': [
+            [
+                'new', {
+                    '[v]erbose flag': 'Verbose mode',
+                    '[j]obs number' : 'Number of jobs to run',
+                    '[f]ile many'   : 'Files to execute against'
+                }
+            ]
+        ],
+        'expected': {
+            'verbose': true,
+            'jobs': 5,
+            'file': ['foo', 'bar']
+        }
+    },
+    {
+        'name':    "Example 1 from ideas: Edgier cases",
+        'cmdline': ['-j', '5', '-f', 'foo'],
+        'setup': [
+            [
+                'new', {
+                    '[v]erbose flag': 'Verbose mode',
+                    '[j]obs number' : 'Number of jobs to run',
+                    '[f]ile many'   : 'Files to execute against'
+                }
+            ]
+        ],
+        'expected': {
+            'verbose': false,
+            'jobs': 5,
+            'file': ['foo']
+        }
+    }
+]
