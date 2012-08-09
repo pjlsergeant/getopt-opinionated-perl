@@ -1,0 +1,9 @@
+[
+    {
+        "name":    "Pass new a listref not a hashref",
+        "setup": [
+            ["new", []],
+        ],
+        "dies": "accepts a hashref",
+    }
+]

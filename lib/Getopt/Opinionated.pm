@@ -26,7 +26,7 @@ sub new {
 
         # Remove the alias field, and lowercase it:
         # [F]ile -> file, saving 'F'
-        if ( $name =~ s/\[(\w)\]/lc($1)/e ) {
+        if ( $name =~ s/\|\[(\w)\]$// || $name =~ s/\[(\w)\]/lc($1)/e ) {
             my $alias = $1;
             die "You've already set '$alias' as an $alias to " . $aliases{$alias}
                 if exists $aliases{$alias};
@@ -95,13 +95,18 @@ sub parse {
 
     while ( @args ) {
         my $key = shift(@args);
+        #warn "Key is $key";
 
         # If we encounter either a '--' or an argument with no hyphen, we're at
         # the end of the options list - stop processing and throw everything
         # else in the catchall
-        if ( $key eq '--' || substr( $key, 0, 1 ) ne '-' ) {
+        if ( $key eq '--' ) {
             @catchall = @args;
-            next;
+            last;
+
+        } elsif ( substr( $key, 0, 1 ) ne '-' ) {
+            @catchall = ($key, @args);
+            last;
 
         # Double '--' are probably the easiest. We make the choice to not deal
         # with --foo=bar style args.
@@ -222,6 +227,10 @@ sub parse {
         if (! defined $found{$option} && defined $self->{'defaults'}->{$option} ) {
             $found{$option} = $self->{'defaults'}->{$option};
         }
+    }
+
+    if ( @catchall ) {
+        $found{ $self->{'catchall'} || 'catchall' } = \@catchall;
     }
 
     # Almost ready to rock and roll...

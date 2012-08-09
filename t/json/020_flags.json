@@ -1,0 +1,34 @@
+[
+    {
+        "name":    "Tar-like flags",
+        "cmdline": [
+            "-vvvczfmoo.tgz",
+            "--gloom", "doom",
+            "--verbose",
+            "moo.txt", "mao.txt"
+        ],
+        "setup": [
+            ["new", {
+                "[v]erbose flag many": "Verbose mode",
+                "[c]reate flag"      : "Number of jobs to run",
+                "[F] flag"           : "Some capital F",
+                "compress|[z] flag"  : "Compression",
+                "[f]ilename"         : "Filename",
+                "gloom"              : "No alias",
+                "[d]efault"          : "Defaulted option"
+            }],
+            ["catchall", "files"],
+            ["defaults", { "default": "the fault"}]
+        ],
+        "expected": {
+            "verbose" : 4,
+            "create"  : true,
+            "f"       : false,
+            "compress": true,
+            "filename": "moo.tgz",
+            "files"   : ["moo.txt", "mao.txt"],
+            "gloom"   : "doom",
+            "default" : "the fault"
+        }
+    }
+]
