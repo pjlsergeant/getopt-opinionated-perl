@@ -51,7 +51,7 @@ sub new {
         # Set the description
         $option_body->{'description'} = $user_options->{$original};
 
-        return $name => $option_body;
+        $name => $option_body;
 
     } keys %$user_options;
 
@@ -80,9 +80,15 @@ sub catchall {
     return $self;
 }
 
+sub args_from {
+    my ( $self, $args ) = @_;
+    $self->{'args_from'} = $args;
+    return $self;
+}
+
 sub parse {
     my ( $self, $subref ) = @_;
-    my @args = @ARGV;
+    my @args = @{ $self->{'args_from'} || \@ARGV};
     my @catchall;
 
     my %found;
@@ -119,7 +125,7 @@ sub parse {
                 if ( $options->{'many'} ) {
                     $found{ $real_key } = ($found{ $real_key } || 0) + 1;
                 } else {
-                    $found{ $real_key } = 1;
+                    $found{ $real_key } = boolean(1);
                 }
 
                 next;
@@ -167,7 +173,7 @@ sub parse {
                 if ( $options->{'many'} ) {
                     $found{ $real_key } = ($found{ $real_key } || 0) + 1;
                 } else {
-                    $found{ $real_key } = 1;
+                    $found{ $real_key } = boolean(1);
                 }
 
                 next;
@@ -209,7 +215,7 @@ sub parse {
                 defined $found{$option};
         # Flags should always be set, but false, if not true
         } elsif ( $self->{'options'}->{$option}->{'flag'} ) {
-            $found{$option} ||= 0;
+            $found{$option} ||= boolean(0);
         }
 
         # Set any defaults
@@ -230,6 +236,15 @@ sub parse {
     }
 
     return \%found;
+}
+
+sub boolean {
+    my $for = shift;
+    if ( $INC{'JSON/XS.pm'} ) {
+        return $for ? JSON::XS::true : JSON::XS::false;
+    } else {
+        return $for;
+    }
 }
 
 1;
