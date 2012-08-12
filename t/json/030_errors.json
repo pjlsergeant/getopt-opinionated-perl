@@ -47,7 +47,7 @@
                 "[v]erbose number flag": "Numbered flag"
             }]
         ],
-        "dies": "both a flag and a number"
+        "dies": "Can't turn 'verbose' in to both a flag and a number. If you want people to specify the flag many times, use 'many'"
     },
     {
         "name": "Required flag",
@@ -57,7 +57,7 @@
                 "[v]erbose required flag": "Required flag"
             }]
         ],
-        "dies": "required flag doesn't make sense"
+        "dies": "'required' and 'flag' together don't make sense in 'verbose'"
     },
     {
         "name": "Unknown default",

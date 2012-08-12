@@ -49,11 +49,11 @@ sub new {
             die "Can't turn '$name' in to both a flag and a number. " .
                 "If you want people to specify the flag many times, use 'many'";
         } elsif ( $option_body->{'flag'} && $option_body->{'required'} ) {
-            die "'required' and 'flag' together doen't make sense in '$name'";
+            die "'required' and 'flag' together don't make sense in '$name'";
         } elsif ( $option_body->{'required'} && $option_body->{'default'} ) {
-            die "'required' and 'default' together doen't make sense in '$name'";
+            die "'required' and 'default' together don't make sense in '$name'";
         } elsif ( $option_body->{'flag'} && $option_body->{'default'} ) {
-            die "'flag' and 'default' together doen't make sense in '$name'";
+            die "'flag' and 'default' together don't make sense in '$name'";
         }
 
         # Set the description

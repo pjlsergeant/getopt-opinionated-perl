@@ -1,6 +1,8 @@
 TODO
-	- Get coverage up to 100% with JSON corpus
-	- Document
+	- Get coverage up to near 100% with JSON corpus
 	- Decoding
-	- Proper usage docs
+	- Proper automatic usage document production
 	- Help override
+	- Add internationalization hooks
+	- Document main body
+	- Add a cookbook
