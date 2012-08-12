@@ -2,8 +2,107 @@
     {
         "name":    "Pass new a listref not a hashref",
         "setup": [
-            ["new", []],
+            ["new", []]
         ],
-        "dies": "accepts a hashref",
+        "dies": "accepts a hashref"
+    },
+    {
+        "name": "Double specification",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "Verbose mode",
+                "[V]erbose":      "Capital Verbose"
+            }]
+        ],
+        "dies": "You've specified 'verbose' more than once"
+    },
+    {
+        "name": "Double alias",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "Verbose mode",
+                "[v]amoose":      "Double alias"
+            }]
+        ],
+        "dies": "as an alias to"
+    },
+    {
+        "name": "False flag",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose flag":      "Verbose mode",
+                "[f]alseflag monkies": "Monkey flag"
+            }]
+        ],
+        "dies": "Unknown option: 'monkies'"
+    },
+    {
+        "name": "Numbered flag",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose number flag": "Numbered flag"
+            }]
+        ],
+        "dies": "both a flag and a number"
+    },
+    {
+        "name": "Required flag",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose required flag": "Required flag"
+            }]
+        ],
+        "dies": "required flag doesn't make sense"
+    },
+    {
+        "name": "Unknown default",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "verbose flag"
+            }],
+            ["defaults", {
+                "monkey": 55
+            }]
+        ],
+        "dies": "You specified a default for 'monkey'"
+    },
+    {
+        "name": "Flag default",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "verbose flag"
+            }],
+            ["defaults", {
+                "verbose": 1
+            }]
+        ],
+        "dies": "Setting a default for a flag makes no sense with 'verbose'"
+    },
+    {
+        "name": "Unknown option (full)",
+        "cmdline": ["--unknown"],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "verbose flag"
+            }]
+        ],
+        "fails": "Unknown option --unknown"
+    },
+    {
+        "name": "Unknown option (alias)",
+        "cmdline": ["-u"],
+        "setup": [
+            ["new", {
+                "[v]erbose flag": "verbose flag"
+            }]
+        ],
+        "fails": "Unknown option -u"
     }
 ]

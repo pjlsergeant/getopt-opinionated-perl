@@ -2,13 +2,18 @@
     {
         "name":    "Tar-like flags",
         "cmdline": [
+            "--longflag",
+            "--countflag",
             "-vvvczfmoo.tgz",
             "--gloom", "doom",
+            "--verbose",
             "--verbose",
             "moo.txt", "mao.txt"
         ],
         "setup": [
             ["new", {
+                "countflag flag many": "A long counting flag",
+                "longflag flag"      : "A long flag",
                 "[v]erbose flag many": "Verbose mode",
                 "[c]reate flag"      : "Number of jobs to run",
                 "[F] flag"           : "Some capital F",
@@ -21,7 +26,9 @@
             ["defaults", { "default": "the fault"}]
         ],
         "expected": {
-            "verbose" : 4,
+            "countflag": 1,
+            "longflag": true,
+            "verbose" : 5,
             "create"  : true,
             "f"       : false,
             "compress": true,

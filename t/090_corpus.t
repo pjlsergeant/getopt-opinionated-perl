@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Differences;
+use Test::Exception;
 use JSON::XS;
 use File::Find::Rule;
 use File::Slurp qw/read_file/;
@@ -21,17 +22,31 @@ for my $test ( @tests ) {
     for my $case ( @cases ) {
 
         my $atom = 'Getopt::Opinionated';
-        for my $setup ( @{ $case->{'setup'} } ) {
-            my ( $method, $options ) = @$setup;
-            $atom = $atom->$method( $options );
+
+        # Test for an exception...
+        if ( my $exception = $case->{'dies'} || $case->{'fails'} ) {
+            my $exception_re = qr/$exception/;
+            throws_ok {
+                run_case( $atom, $case );
+            } $exception_re, $case->{'name'};
+
+        # Test for result
+        } else {
+            my $result = run_case( $atom, $case );
+            is_deeply( $result, $case->{'expected'}, $case->{'name'} );
         }
-
-        my $result = $atom->args_from( $case->{'cmdline'} )->parse();
-
-        is_deeply( $result, $case->{'expected'}, $case->{'name'} );
 
     }
 
+}
+
+sub run_case {
+    my ($atom, $case) = @_;
+    for my $setup ( @{ $case->{'setup'} } ) {
+        my ( $method, $options ) = @$setup;
+        $atom = $atom->$method( $options );
+    }
+    return $atom->args_from( $case->{'cmdline'} )->parse();
 }
 
 done_testing;

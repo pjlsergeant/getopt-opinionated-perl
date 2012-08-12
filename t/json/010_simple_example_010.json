@@ -30,5 +30,22 @@
             "jobs": 5,
             "file": ["foo"]
         }
+    },
+    {
+        "name":    "Double Hyphen",
+        "cmdline": ["-v", "-j", "5", "-f", "foo", "--", "-f", "bla", "-v"],
+        "setup": [
+            ["new", {
+                "[v]erbose flag many": "Verbose mode",
+                "[j]obs number" : "Number of jobs to run",
+                "[f]ile many"   : "Files to execute against"
+            }]
+        ],
+        "expected": {
+            "verbose": 1,
+            "jobs": 5,
+            "file": ["foo"],
+            "catchall": ["-f", "bla", "-v"]
+        }
     }
 ]

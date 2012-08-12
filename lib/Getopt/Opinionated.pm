@@ -12,6 +12,7 @@ sub new {
     my ($class, $user_options) = @_;
     ref $user_options eq 'HASH' || die "new() accepts a hashref, not a list";
 
+    my %seen;
     my %aliases;
 
     my %resolved_options = map {
@@ -28,11 +29,14 @@ sub new {
         # [F]ile -> file, saving 'F'
         if ( $name =~ s/\|\[(\w)\]$// || $name =~ s/\[(\w)\]/lc($1)/e ) {
             my $alias = $1;
-            die "You've already set '$alias' as an $alias to " . $aliases{$alias}
+            die "You've already set '$alias' as an alias to " . $aliases{$alias}
                 if exists $aliases{$alias};
             $aliases{$1} = $name;
         }
         $option_body->{'name'} = $name;
+
+        # Don't want people setting the same option twice...
+        die "You've specified '$name' more than once" if $seen{$name}++;
 
         # Set any flags
         my %allowed_flags = $class->_real_flags;
@@ -45,7 +49,11 @@ sub new {
             die "Can't turn '$name' in to both a flag and a number. " .
                 "If you want people to specify the flag many times, use 'many'";
         } elsif ( $option_body->{'flag'} && $option_body->{'required'} ) {
-            die "A required flag doesn't make sense for '$name'";
+            die "'required' and 'flag' together doen't make sense in '$name'";
+        } elsif ( $option_body->{'required'} && $option_body->{'default'} ) {
+            die "'required' and 'default' together doen't make sense in '$name'";
+        } elsif ( $option_body->{'flag'} && $option_body->{'default'} ) {
+            die "'flag' and 'default' together doen't make sense in '$name'";
         }
 
         # Set the description
@@ -137,7 +145,8 @@ sub parse {
             }
 
             # Get the value...
-            my $value = shift( @args ) || '';
+            my $value = shift( @args );
+            fail_usage( "--$real_key needs an argument" ) unless defined $value;
 
             # Enforce numeric
             if ( $options->{'number'} ) {
@@ -189,7 +198,9 @@ sub parse {
             if ( length $key > 2 ) {
                 $value = substr( $key, 2 );
             } else {
-                $value = shift( @args ) || '';
+                # Get the value...
+                $value = shift( @args );
+                fail_usage( "-$alias needs an argument" ) unless defined $value;
             }
 
             # Enforce numeric
@@ -245,6 +256,10 @@ sub parse {
     }
 
     return \%found;
+}
+
+sub fail_usage {
+    die shift();
 }
 
 sub boolean {
