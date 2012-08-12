@@ -17,7 +17,7 @@
     },
     {
         "name":    "Example 1 from ideas: Edgier cases",
-        "cmdline": ["-j", "5", "-f", "foo"],
+        "cmdline": ["--jobs", "5", "-f", "foo"],
         "setup": [
             ["new", {
                 "[v]erbose flag": "Verbose mode",
@@ -33,7 +33,7 @@
     },
     {
         "name":    "Double Hyphen",
-        "cmdline": ["-v", "-j", "5", "-f", "foo", "--", "-f", "bla", "-v"],
+        "cmdline": ["-v", "-j", "5", "--file", "baz", "--file", "bat", "-f", "foo", "-f", "bar",  "--", "-f", "bla", "-v"],
         "setup": [
             ["new", {
                 "[v]erbose flag many": "Verbose mode",
@@ -44,8 +44,56 @@
         "expected": {
             "verbose": 1,
             "jobs": 5,
-            "file": ["foo"],
+            "file": ["baz", "bat", "foo", "bar"],
             "catchall": ["-f", "bla", "-v"]
         }
+    },
+    {
+        "name": "Simple required",
+        "cmdline": ["-v", "bar"],
+        "setup": [
+            ["new", {
+                "[v]erbose required": "required verbose"
+            }]
+        ],
+        "expected": {
+            "verbose": "bar"
+        }
+    },
+    {
+        "name": "Simple default",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose": "default verbose"
+            }],
+            ["defaults", {
+                "verbose": "bar"
+            }]
+        ],
+        "expected": {
+            "verbose": "bar"
+        }
+    },
+    {
+        "name": "Simply not set",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose"
+            }]
+        ],
+        "expected": {}
+    },
+    {
+        "name": "parse() results",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose"
+            }]
+        ],
+        "parse":    { "foo": "bar" },
+        "expected": { "foo": "bar" }
     }
 ]

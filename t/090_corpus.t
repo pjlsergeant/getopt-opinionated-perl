@@ -46,7 +46,9 @@ sub run_case {
         my ( $method, $options ) = @$setup;
         $atom = $atom->$method( $options );
     }
-    return $atom->args_from( $case->{'cmdline'} )->parse();
+    return $atom->args_from( $case->{'cmdline'} )->parse(
+        ( $case->{'parse'} ? (sub {$case->{'parse'}}) : () )
+    );
 }
 
 done_testing;

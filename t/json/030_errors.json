@@ -104,5 +104,84 @@
             }]
         ],
         "fails": "Unknown option -u"
+    },
+    {
+        "name": "String undef (full)",
+        "cmdline": ["--verbose"],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose string"
+            }]
+        ],
+        "fails": "--verbose requires an argument"
+    },
+    {
+        "name": "String undef (alias)",
+        "cmdline": ["-v"],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose string"
+            }]
+        ],
+        "fails": "-v requires an argument"
+    },
+    {
+        "name": "Require number (full)",
+        "cmdline": ["--verbose", "NaN"],
+        "setup": [
+            ["new", {
+                "[v]erbose number": "verbose number"
+            }]
+        ],
+        "fails": "--verbose must be a number"
+    },
+    {
+        "name": "Require number (alias)",
+        "cmdline": ["-v", "NaN"],
+        "setup": [
+            ["new", {
+                "[v]erbose number": "verbose number"
+            }]
+        ],
+        "fails": "-v must be a number"
+    },
+    {
+        "name": "Defined twice (full)",
+        "cmdline": ["--verbose", "NaN", "--verbose", "NooN"],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose"
+            }]
+        ],
+        "fails": "You have defined --verbose twice"
+    },
+    {
+        "name": "Defined twice (alias)",
+        "cmdline": ["-v", "NaN", "-v", "NooN"],
+        "setup": [
+            ["new", {
+                "[v]erbose": "verbose"
+            }]
+        ],
+        "fails": "You have defined -v twice"
+    },
+    {
+        "name": "Missing Required",
+        "cmdline": [],
+        "setup": [
+            ["new", {
+                "[v]erbose required": "verbose"
+            }]
+        ],
+        "fails": "You must specify 'verbose'"
+    },
+    {
+        "name": "User-specified fail",
+        "cmdline": [],
+        "setup": [
+            ["new", {}]
+        ],
+        "parse": "Foo bar ban",
+        "fails": "Foo bar ban"
     }
 ]

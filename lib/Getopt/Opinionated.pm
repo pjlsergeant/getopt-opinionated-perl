@@ -50,10 +50,6 @@ sub new {
                 "If you want people to specify the flag many times, use 'many'";
         } elsif ( $option_body->{'flag'} && $option_body->{'required'} ) {
             die "'required' and 'flag' together don't make sense in '$name'";
-        } elsif ( $option_body->{'required'} && $option_body->{'default'} ) {
-            die "'required' and 'default' together don't make sense in '$name'";
-        } elsif ( $option_body->{'flag'} && $option_body->{'default'} ) {
-            die "'flag' and 'default' together don't make sense in '$name'";
         }
 
         # Set the description
@@ -146,7 +142,7 @@ sub parse {
 
             # Get the value...
             my $value = shift( @args );
-            fail_usage( "--$real_key needs an argument" ) unless defined $value;
+            fail_usage( "--$real_key requires an argument" ) unless defined $value;
 
             # Enforce numeric
             if ( $options->{'number'} ) {
@@ -160,7 +156,7 @@ sub parse {
                 push( @{ $found{ $real_key } }, $value );
             } else {
                 if ( defined $found{ $real_key } ) {
-                    fail_usage("You have defined $real_key twice");
+                    fail_usage("You have defined --$real_key twice");
                 } else {
                     $found{ $real_key } = $value;
                 }
@@ -200,7 +196,7 @@ sub parse {
             } else {
                 # Get the value...
                 $value = shift( @args );
-                fail_usage( "-$alias needs an argument" ) unless defined $value;
+                fail_usage( "-$alias requires an argument" ) unless defined $value;
             }
 
             # Enforce numeric
@@ -215,7 +211,7 @@ sub parse {
                 push( @{ $found{ $real_key } }, $value );
             } else {
                 if ( defined $found{ $real_key } ) {
-                    fail_usage("You have defined $alias twice");
+                    fail_usage("You have defined -$alias twice");
                 } else {
                     $found{ $real_key } = $value;
                 }
@@ -246,7 +242,7 @@ sub parse {
 
     # Almost ready to rock and roll...
     if ( $subref ) {
-        my $returned = $subref->{ \%found } ||
+        my $returned = $subref->( \%found ) ||
             die "Subref to parse() didn't return true value";
         unless (ref $returned) {
             fail_usage( $returned );
