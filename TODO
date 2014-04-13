@@ -1,6 +1,7 @@
 TODO
 	- Decoding
 	- Proper automatic usage document production
+	- Match up error messages to standard, eg: "Invalid attribute"
 	- Help override
 	- Add internationalization hooks
 	- Document main body

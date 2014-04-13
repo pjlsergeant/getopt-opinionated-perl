@@ -5,8 +5,8 @@
         "setup": [
             ["new", {
                 "[v]erbose flag": "Verbose mode",
-                "[j]obs number" : "Number of jobs to run",
-                "[f]ile many"   : "Files to execute against"
+                "[j]obs number" : "=JOBS Number of jobs to run",
+                "[f]ile many"   : "=FILE Files to execute against"
             }]
         ],
         "expected": {
